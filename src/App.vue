@@ -2,7 +2,7 @@
   <div class="page">
     <div class="content">
       <svg ref="svgRef" aria-label="Random barcode" />
-      <button type="button" @click="pickBarcode">Pick again</button>
+      <button type="button" @click="handlePickClick">Pick again</button>
     </div>
   </div>
 </template>
@@ -16,13 +16,24 @@ import barcodes from './data/barcode'
 const svgRef = ref<SVGSVGElement | null>(null)
 const selectedBarcode = ref('')
 
-function pickBarcode() {
+function pickBarcode(ensureDifferent = false) {
   if (barcodes.length === 0) {
     selectedBarcode.value = ''
     return
   }
 
-  const index = random.int(0, barcodes.length - 1)
+  if (!ensureDifferent || barcodes.length === 1) {
+    const index = random.int(0, barcodes.length - 1)
+    selectedBarcode.value = barcodes[index] ?? ''
+    renderBarcode()
+    return
+  }
+
+  // Ensure the new pick is different from the current one
+  const currentIndex = selectedBarcode.value ? barcodes.indexOf(selectedBarcode.value) : -1
+  const candidates = barcodes.map((_, i) => i).filter(i => i !== currentIndex)
+  const pickIdx = random.int(0, candidates.length - 1)
+  const index = candidates[pickIdx]!
   selectedBarcode.value = barcodes[index] ?? ''
   renderBarcode()
 }
@@ -40,6 +51,11 @@ function renderBarcode() {
     height: 80,
     margin: 10,
   })
+}
+
+function handlePickClick(e: Event) {
+  e.preventDefault()
+  pickBarcode(true)
 }
 
 onMounted(() => {
