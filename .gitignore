@@ -1,0 +1,52 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+/cypress/videos/
+/cypress/screenshots/
+
+# Editor directories and files
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# TS Build
+*.tsbuildinfo
+
+# unplugin d.ts
+auto-imports.d.ts
+components.d.ts
+
+# vite error build log
+vite.config.ts.*
+
+# rollup-plugin-visualizer
+stats.html
+
+# i18n Helper output
+/src/i18n/helper/*
+!/src/i18n/helper/README.md
+!/src/i18n/helper/flatToNested.ts
+!/src/i18n/helper/helper.ts
+!/src/i18n/helper/utils.ts
+
+# Cache
+.eslintcache

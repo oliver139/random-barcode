@@ -1,0 +1,92 @@
+{
+  "name": "random-barcode",
+  "type": "module",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A Tool for showing invoice carrier barcode randomly",
+  "author": "Oliver Mak",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oliver139/random-barcode"
+  },
+  "keywords": [
+    "taiwan",
+    "barcode",
+    "invoice"
+  ],
+  "engines": {
+    "node": "^24.18.0",
+    "runtime": {
+      "name": "node",
+      "version": "^24.18.0",
+      "onFail": "download"
+    }
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "^24.18.0",
+      "onFail": "download"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.13.1",
+      "onFail": "download"
+    }
+  },
+  "scripts": {
+    "predev": "rimraf auto-imports.d.ts components.d.ts",
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "build:unplugin": "nr build-only && rimraf ./dist",
+    "type-check": "vue-tsc --build",
+    "lint": "eslint . --cache",
+    "lint:fix": "eslint . --cache --fix",
+    "lint:inspect": "eslint --inspect-config",
+    "release": "nlx bumpp",
+    "analyze": "nlx node-modules-inspector"
+  },
+  "dependencies": {
+    "jsbarcode": "^3.12.3",
+    "random": "^5.4.1",
+    "vue": "^3.5.38"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^9.0.0",
+    "@antfu/ni": "^30.1.0",
+    "@oliver139/eslint-config": "^7.5.4",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^24.13.2",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/tsconfig": "^0.9.1",
+    "autoprefixer": "^10.5.2",
+    "eslint": "^10.5.0",
+    "npm-check-updates": "^22.2.7",
+    "npm-run-all2": "^9.0.2",
+    "rimraf": "^6.1.3",
+    "simple-git-hooks": "^2.13.1",
+    "taze": "^19.14.1",
+    "typescript": "~6.0.0",
+    "unplugin-auto-import": "^21.0.0",
+    "unplugin-vue-components": "^32.1.0",
+    "vite": "^8.0.16",
+    "vite-plugin-vue-devtools": "^8.1.2",
+    "vue-tsc": "^3.3.5"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*": "eslint --cache --fix"
+  },
+  "browserslist": [
+    ">0.3%",
+    "defaults",
+    "last 5 versions",
+    "last 10 Chrome versions",
+    "not dead"
+  ]
+}
