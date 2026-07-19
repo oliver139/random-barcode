@@ -1,7 +1,9 @@
 <template>
   <div class="barcode-shower">
-    <!-- eslint-disable-next-line vue/html-self-closing -->
-    <svg ref="svgRef" aria-label="Invoice carrier"></svg>
+    <button type="button" aria-label="Click to refresh" @click="$emit('refresh')">
+      <!-- eslint-disable-next-line vue/html-self-closing -->
+      <svg ref="svgRef" aria-label="Invoice carrier"></svg>
+    </button>
   </div>
 </template>
 
@@ -10,6 +12,10 @@ import JsBarcode from 'jsbarcode'
 
 const props = defineProps<{
   value: string
+}>()
+
+defineEmits<{
+  refresh: []
 }>()
 
 const svgRef = ref<SVGSVGElement | null>(null)
@@ -38,6 +44,13 @@ watch(() => props.value, (v) => {
 </script>
 
 <style scoped>
+button {
+  cursor: pointer;
+  display: flex;
+  background: none;
+  border: none;
+  padding: 0;
+}
 .barcode-shower {
   display: flex;
   flex-direction: column;
