@@ -1,27 +1,24 @@
 <template>
-  <div class="page">
-    <div class="content">
+  <main class="page">
+    <section class="content">
       <BarcodeShower :value="selectedBarcode" @refresh="getRandomBarcode()" />
-      <ul>
-        <li>
-          <button type="button" class="stat-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-              <path d="M0 0h24v24H0z" fill="none" />
-              <path fill="currentColor" d="M7.755 13.38v6.83a1.54 1.54 0 0 1-1.54 1.54h-1.81a1.54 1.54 0 0 1-1.55-1.54v-6.83a1.54 1.54 0 0 1 1.55-1.55h1.81a1.54 1.54 0 0 1 1.54 1.55m6.7-9.58v16.41a1.54 1.54 0 0 1-1.55 1.54h-1.81a1.55 1.55 0 0 1-1.55-1.54V3.8a1.56 1.56 0 0 1 1.55-1.55h1.81a1.55 1.55 0 0 1 1.55 1.55m6.69 5.18v11.23a1.54 1.54 0 0 1-1.54 1.54h-1.81a1.54 1.54 0 0 1-1.55-1.54V8.98a1.55 1.55 0 0 1 1.55-1.55h1.85a1.55 1.55 0 0 1 1.5 1.55" />
-            </svg>
-          </button>
-        </li>
-        <li>
-          <button type="button" class="confirm-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-              <path d="M0 0h24v24H0z" fill="none" />
-              <path fill="currentColor" d="M9 15.59L4.71 11.3L3.3 12.71l5 5c.2.2.45.29.71.29s.51-.1.71-.29l11-11l-1.41-1.41L9.02 15.59Z" />
-            </svg>
-          </button>
-        </li>
-      </ul>
-    </div>
-  </div>
+
+      <footer>
+        <ul>
+          <li>
+            <button type="button" class="stat-btn">
+              <i-material-symbols-bar-chart-rounded style="transform: scaleX(-1);" />
+            </button>
+          </li>
+          <li>
+            <button type="button" class="confirm-btn">
+              <i-material-symbols-check />
+            </button>
+          </li>
+        </ul>
+      </footer>
+    </section>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -67,9 +64,16 @@ onMounted(() => {
 
 .content {
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   gap: 2rem;
+}
+footer {
+  position: absolute;
+  left: 50%;
+  bottom: -5.5rem;
+  transform: translateX(-50%);
 }
 
 ul {
@@ -79,7 +83,7 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 button {

@@ -3,6 +3,8 @@ import { defineConfig } from 'vite'
 
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Icons from 'unplugin-icons/vite'
 import Components from 'unplugin-vue-components/vite'
 
 // https://vite.dev/config/
@@ -20,6 +22,8 @@ export default defineConfig({
       dts: true,
       imports: [
         'vue',
+        '@vueuse/core',
+        // { '@vueuse/core': ['promiseTimeout'] },
       ],
       dirs: [
         'src/utils/**',
@@ -33,7 +37,11 @@ export default defineConfig({
         'src/layouts',
         'src/views',
       ],
+      resolvers: [
+        IconsResolver(),
+      ],
     }),
+    Icons(),
   ],
   resolve: {
     alias: {
