@@ -11,6 +11,11 @@
             </button>
           </li>
           <li>
+            <button type="button" class="setting-btn">
+              <i-material-symbols-settings />
+            </button>
+          </li>
+          <li>
             <button type="button" class="confirm-btn">
               <i-material-symbols-check />
             </button>
@@ -83,7 +88,7 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 button {
@@ -103,6 +108,13 @@ button {
 }
 .stat-btn:hover {
   background: #eab308;
+}
+
+.setting-btn {
+  background: #f97316;
+}
+.setting-btn:hover {
+  background: #ea580c;
 }
 
 .confirm-btn {
