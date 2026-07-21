@@ -21,7 +21,7 @@
             </button>
           </li>
           <li>
-            <button type="button" class="confirm-btn">
+            <button type="button" class="confirm-btn" @click="recordResult()">
               <i-material-symbols-check />
             </button>
           </li>
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BarcodeInfo } from './type/general'
+import type { BarcodeInfo, UsageRecord } from './type/general'
 import random from 'random'
 import BarcodeShower from './components/BarcodeShower.vue'
 
@@ -64,15 +64,33 @@ function getRandomBarcode(ensureDifferent = false) {
   selectedBarcode.value = random.choice(candidates)!
 }
 
-onMounted(() => {
+function newBarcode() {
   getRandomBarcode()
   refreshedCount.value = 0
+}
+
+onMounted(() => {
+  newBarcode()
 })
 
 const settingDialog = useTemplateRef('settingDialog')
 function doneSetting() {
-  getRandomBarcode()
-  refreshedCount.value = 0
+  newBarcode()
+}
+
+const records = useLocalStorage<Record<string, UsageRecord>>('records', {})
+function recordResult() {
+  if (!selectedBarcode.value) return
+
+  const currentCount = records.value[selectedBarcode.value.code]?.count || 0
+  records.value = {
+    ...records.value,
+    [selectedBarcode.value.code]: {
+      name: selectedBarcode.value.name,
+      count: currentCount + 1,
+    },
+  }
+  // newBarcode()
 }
 </script>
 

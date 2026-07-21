@@ -4,15 +4,24 @@
     <form method="dialog" class="setting-dialog__content" @submit="saveSetting">
       <div class="title">條碼列表（名字，條碼）</div>
       <textarea v-model="barcodeList" autocomplete="off" rows="10" />
-      <button type="submit" class="close-dialog">
-        <i-material-symbols-check />
-      </button>
+      <ul>
+        <li>
+          <button type="button" class="close-dialog" commandfor="setting-dialog" command="close">
+            <i-material-symbols-close />
+          </button>
+        </li>
+        <li>
+          <button type="submit" class="submit-dialog">
+            <i-material-symbols-check />
+          </button>
+        </li>
+      </ul>
     </form>
   </dialog>
 </template>
 
 <script setup lang="ts">
-import type { BarcodeInfo } from '@/type/general'
+import type { BarcodeInfo, UsageRecord } from '@/type/general'
 
 const emit = defineEmits<{
   done: []
@@ -20,6 +29,7 @@ const emit = defineEmits<{
 
 const dialog = useTemplateRef('dialog')
 const barcodes = useLocalStorage<BarcodeInfo[]>('barcodes', [])
+const records = useLocalStorage<Record<string, UsageRecord>>('records', {})
 
 const barcodeList = ref('')
 function isBarcodeText(code: string) {
@@ -34,6 +44,7 @@ function saveSetting() {
     const [v1, v2] = item.split(',').map(b => b.trim())
     return isBarcodeText(v1) ? { name: v2 || '這誰？', code: v1 } : { name: v1 || '這誰？', code: v2 }
   })
+  records.value = {}
   emit('done')
 }
 
@@ -89,26 +100,42 @@ dialog[open]::backdrop {
   flex-flow: column nowrap;
   justify-content: center;
 }
-.close-dialog {
+
+ul {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  padding: 0;
+  margin: 2rem 0 0;
+  transform: translateX(-50%);
+}
+ul button {
   color: white;
   font-size: 2.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  left: 50%;
-  top: 100%;
   border: none;
   border-radius: 9999px;
   padding: .5rem;
-  margin-top: 2rem;
-  background: #10b981;
   transition: background-color 0.2s ease;
   transition: all .3s ease;
-  transform: translateX(-50%);
   cursor: pointer;
 }
+.close-dialog {
+  background: #f87171;
+}
 .close-dialog:hover {
+  background: #ef4444;
+}
+.submit-dialog {
+  background: #10b981;
+}
+.submit-dialog:hover {
   background: #059669;
 }
 
