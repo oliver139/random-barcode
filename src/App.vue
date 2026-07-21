@@ -1,7 +1,12 @@
 <template>
   <main class="page">
     <section class="content">
-      <BarcodeShower :value="selectedBarcode" @refresh="getRandomBarcode()" />
+      <header>
+        <h1>{{ selectedBarcode?.name }}</h1>
+        <p v-if="refreshedCount">已刷新過了 {{ refreshedCount }} 次</p>
+      </header>
+
+      <BarcodeShower :value="selectedBarcode?.code" @refresh="getRandomBarcode()" />
 
       <footer>
         <ul>
@@ -24,42 +29,51 @@
       </footer>
     </section>
 
-    <SettingDialog ref="settingDialog" />
+    <SettingDialog ref="settingDialog" @done="doneSetting()" />
   </main>
 </template>
 
 <script setup lang="ts">
+import type { BarcodeInfo } from './type/general'
 import random from 'random'
 import BarcodeShower from './components/BarcodeShower.vue'
-import barcodes from './data/barcode'
 
-const defaultBarcode = ''
-const selectedBarcode = ref('')
+const barcodes = useLocalStorage<BarcodeInfo[]>('barcodes', [])
+const selectedBarcode = shallowRef<BarcodeInfo | null>(null)
 
-function pickBarcode(ensureDifferent = false) {
-  if (barcodes.length === 0) {
-    selectedBarcode.value = defaultBarcode
+const refreshedCount = ref(0)
+
+function getRandomBarcode(ensureDifferent = false) {
+  if (barcodes.value.length === 0) {
+    selectedBarcode.value = null
+    return
+  }
+  if (barcodes.value.length === 1) {
+    selectedBarcode.value = barcodes.value[0]
     return
   }
 
-  if (!ensureDifferent || barcodes.length === 1) {
-    selectedBarcode.value = random.choice(barcodes) || defaultBarcode
+  refreshedCount.value += 1
+
+  if (!ensureDifferent) {
+    selectedBarcode.value = random.choice(barcodes.value)!
     return
   }
 
-  const candidates = barcodes.filter(b => b !== selectedBarcode.value)
-  selectedBarcode.value = random.choice(candidates) || defaultBarcode
-}
-
-function getRandomBarcode() {
-  pickBarcode(true)
+  const candidates = barcodes.value.filter(b => b.code !== selectedBarcode.value?.code)
+  selectedBarcode.value = random.choice(candidates)!
 }
 
 onMounted(() => {
-  pickBarcode()
+  getRandomBarcode()
+  refreshedCount.value = 0
 })
 
 const settingDialog = useTemplateRef('settingDialog')
+function doneSetting() {
+  getRandomBarcode()
+  refreshedCount.value = 0
+}
 </script>
 
 <style scoped>
@@ -78,11 +92,24 @@ const settingDialog = useTemplateRef('settingDialog')
   align-items: center;
   gap: 2rem;
 }
+header {
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  margin-bottom: 2.5rem;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+header p {
+  font-size: 1.25rem;
+  margin: 0;
+}
 footer {
   position: absolute;
   left: 50%;
   top: 100%;
-  margin-top: 1.5rem;
+  margin-top: 2.5rem;
   transform: translateX(-50%);
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="barcode-shower">
-    <button type="button" aria-label="Click to refresh" @click="$emit('refresh')">
+    <button v-if="value" type="button" aria-label="Click to refresh" @click="$emit('refresh')">
       <p class="hint-text">
         <i-material-symbols-refresh-rounded />
         <span>輕觸條碼以刷新</span>
@@ -15,7 +15,7 @@
 import JsBarcode from 'jsbarcode'
 
 const props = defineProps<{
-  value: string
+  value?: string
 }>()
 
 defineEmits<{
@@ -31,20 +31,22 @@ function renderBarcode(value: string) {
     format: 'CODE39',
     displayValue: true,
     fontSize: 18,
+    textMargin: 10,
     width: 2,
     height: 80,
     margin: 10,
   })
 }
 
-onMounted(() => {
-  if (props.value) renderBarcode(props.value)
-})
+watchImmediate(() => props.value, (v) => {
+  if (!props.value) {
+    if (svgRef.value) svgRef.value.innerHTML = ''
+    return
+  }
 
-watch(() => props.value, (v) => {
   if (svgRef.value) svgRef.value.innerHTML = ''
   if (v) renderBarcode(v)
-})
+}, { flush: 'post' })
 </script>
 
 <style scoped>
@@ -74,7 +76,5 @@ button {
 
 .barcode-shower .barcode-img {
   max-width: 100%;
-  width: 320px;
-  height: auto;
 }
 </style>

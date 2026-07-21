@@ -12,28 +12,33 @@
 </template>
 
 <script setup lang="ts">
-interface BarcodeInfo {
-  name?: string
-  code: string
-}
+import type { BarcodeInfo } from '@/type/general'
+
+const emit = defineEmits<{
+  done: []
+}>()
 
 const dialog = useTemplateRef('dialog')
-const memory = useLocalStorage<BarcodeInfo[]>('barcodes', [])
+const barcodes = useLocalStorage<BarcodeInfo[]>('barcodes', [])
 
 const barcodeList = ref('')
+function isBarcodeText(code: string) {
+  return code.trim().startsWith('/') && code.trim().length === 8
+}
 function saveSetting() {
-  memory.value = barcodeList.value.replaceAll('，', ',').split('\n').filter((item) => {
-    return item.includes(',') ? item.split(',').some(b => b.trim().startsWith('/')) : item.trim().startsWith('/')
+  barcodes.value = barcodeList.value.replaceAll('，', ',').split('\n').filter((item) => {
+    return item.includes(',') ? item.split(',').some(b => isBarcodeText(b.trim())) : isBarcodeText(item.trim())
   }).map<BarcodeInfo>((item) => {
     if (!item.includes(',')) return { name: '', code: item }
 
     const [v1, v2] = item.split(',').map(b => b.trim())
-    return v1.startsWith('/') ? { name: v2, code: v1 } : { name: v1, code: v2 }
+    return isBarcodeText(v1) ? { name: v2 || '這誰？', code: v1 } : { name: v1 || '這誰？', code: v2 }
   })
+  emit('done')
 }
 
 function showDialog() {
-  barcodeList.value = memory.value.map(item => Object.values(item).join(',')).join('\n')
+  barcodeList.value = barcodes.value.map(item => Object.values(item).join(',')).join('\n')
   dialog.value?.showModal()
 }
 
