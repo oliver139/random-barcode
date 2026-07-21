@@ -11,7 +11,7 @@
             </button>
           </li>
           <li>
-            <button type="button" class="setting-btn">
+            <button type="button" class="setting-btn" @click="settingDialog?.showDialog()">
               <i-material-symbols-settings />
             </button>
           </li>
@@ -23,6 +23,8 @@
         </ul>
       </footer>
     </section>
+
+    <SettingDialog ref="settingDialog" />
   </main>
 </template>
 
@@ -56,6 +58,8 @@ function getRandomBarcode() {
 onMounted(() => {
   pickBarcode()
 })
+
+const settingDialog = useTemplateRef('settingDialog')
 </script>
 
 <style scoped>
@@ -77,7 +81,8 @@ onMounted(() => {
 footer {
   position: absolute;
   left: 50%;
-  bottom: -5.5rem;
+  top: 100%;
+  margin-top: 1.5rem;
   transform: translateX(-50%);
 }
 
@@ -93,6 +98,8 @@ ul {
 
 button {
   display: flex;
+  justify-content: center;
+  align-items: center;
   padding: .5rem;
   border: none;
   border-radius: 9999px;

@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
+import 'modern-normalize'
 import '@/assets/main.css'
-import '@/assets/normalize.css'
 
 createApp(App).mount('#app')

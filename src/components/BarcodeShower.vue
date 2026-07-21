@@ -3,7 +3,7 @@
     <button type="button" aria-label="Click to refresh" @click="$emit('refresh')">
       <p class="hint-text">
         <i-material-symbols-refresh-rounded />
-        <span>輕觸以刷新</span>
+        <span>輕觸條碼以刷新</span>
       </p>
       <!-- eslint-disable-next-line vue/html-self-closing -->
       <svg ref="svgRef" class="barcode-img" aria-label="Invoice carrier"></svg>
