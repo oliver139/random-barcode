@@ -8,6 +8,9 @@
       <!-- eslint-disable-next-line vue/html-self-closing -->
       <svg ref="svgRef" class="barcode-img" aria-label="Invoice carrier"></svg>
     </button>
+    <button v-else type="button">
+      <!--  -->
+    </button>
   </div>
 </template>
 
@@ -67,11 +70,6 @@ button {
   background: none;
   border: none;
   padding: 0;
-}
-.barcode-shower {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .barcode-shower .barcode-img {

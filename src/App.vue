@@ -11,7 +11,7 @@
       <footer>
         <ul>
           <li>
-            <button type="button" class="stat-btn">
+            <button type="button" class="stat-btn" @click="recordDialog?.showDialog()">
               <i-material-symbols-bar-chart-rounded style="transform: scaleX(-1);" />
             </button>
           </li>
@@ -30,6 +30,7 @@
     </section>
 
     <SettingDialog ref="settingDialog" @done="doneSetting()" />
+    <RecordDialog ref="recordDialog" />
   </main>
 </template>
 
@@ -65,8 +66,10 @@ function getRandomBarcode(ensureDifferent = false) {
 }
 
 function newBarcode() {
-  getRandomBarcode()
-  refreshedCount.value = 0
+  nextTick(() => {
+    getRandomBarcode()
+    refreshedCount.value = 0
+  })
 }
 
 onMounted(() => {
@@ -90,8 +93,10 @@ function recordResult() {
       count: currentCount + 1,
     },
   }
-  // newBarcode()
+  newBarcode()
 }
+
+const recordDialog = useTemplateRef('recordDialog')
 </script>
 
 <style scoped>
@@ -119,9 +124,13 @@ header {
   transform: translateX(-50%);
   white-space: nowrap;
 }
-header p {
-  font-size: 1.25rem;
+header h1 {
+  font-size: 1.5rem;
   margin: 0;
+}
+header p {
+  font-size: 1.125rem;
+  margin: .75rem 0 0;
 }
 footer {
   position: absolute;

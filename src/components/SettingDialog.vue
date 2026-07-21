@@ -2,9 +2,11 @@
   <!-- <button command="show-modal" commandfor="my-dialog">Open dialog</button> -->
   <dialog id="setting-dialog" ref="dialog">
     <form method="dialog" class="setting-dialog__content" @submit="saveSetting">
-      <div class="title">條碼列表（名字，條碼）</div>
-      <textarea v-model="barcodeList" autocomplete="off" rows="10" />
-      <ul>
+      <div class="form-content">
+        <div class="title">條碼列表（名字，條碼）</div>
+        <textarea v-model="barcodeList" autocomplete="off" rows="10" />
+      </div>
+      <ul class="btn-list">
         <li>
           <button type="button" class="close-dialog" commandfor="setting-dialog" command="close">
             <i-material-symbols-close />
@@ -39,7 +41,7 @@ function saveSetting() {
   barcodes.value = barcodeList.value.replaceAll('，', ',').split('\n').filter((item) => {
     return item.includes(',') ? item.split(',').some(b => isBarcodeText(b.trim())) : isBarcodeText(item.trim())
   }).map<BarcodeInfo>((item) => {
-    if (!item.includes(',')) return { name: '', code: item }
+    if (!item.includes(',')) return { name: '這誰？', code: item }
 
     const [v1, v2] = item.split(',').map(b => b.trim())
     return isBarcodeText(v1) ? { name: v2 || '這誰？', code: v1 } : { name: v1 || '這誰？', code: v2 }
@@ -61,10 +63,11 @@ defineExpose({
 <style scoped>
 dialog {
   width: min(24rem, 100%);
-  border: none;
-  border-radius: 1rem;
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   opacity: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
   transition: all .3s ease allow-discrete;
   overflow: visible;
 }
@@ -76,6 +79,7 @@ dialog::backdrop {
 
 dialog[open] {
   display: flex;
+  flex-flow: column nowrap;
   opacity: 1;
 }
 dialog[open]::backdrop {
@@ -95,25 +99,33 @@ dialog[open]::backdrop {
 
 .setting-dialog__content {
   display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.form-content {
+  display: flex;
   width: 100%;
   position: relative;
   flex-flow: column nowrap;
   justify-content: center;
+  background: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 ul {
   list-style: none;
+}
+.btn-list {
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  position: absolute;
-  left: 50%;
-  top: 100%;
   padding: 0;
-  margin: 2rem 0 0;
-  transform: translateX(-50%);
+  margin: 1.5rem 0 0;
 }
-ul button {
+.btn-list button {
   color: white;
   font-size: 2.5rem;
   display: flex;
@@ -146,6 +158,7 @@ ul button {
 }
 
 textarea {
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: .5rem;
   padding: .75rem 1rem;
