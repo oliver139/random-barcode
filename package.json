@@ -1,7 +1,7 @@
 {
   "name": "random-barcode",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "A Tool for showing invoice carrier barcode randomly",
   "author": "Oliver Mak",
@@ -46,7 +46,7 @@
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --cache --fix",
     "lint:inspect": "eslint --inspect-config",
-    "release": "nlx bumpp",
+    "release": "nr build && nlx bumpp",
     "analyze": "nlx node-modules-inspector"
   },
   "dependencies": {
