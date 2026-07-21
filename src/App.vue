@@ -2,11 +2,15 @@
   <main class="page">
     <section class="content">
       <header>
-        <h1>{{ selectedBarcode?.name }}</h1>
+        <h1>{{ selectedBarcode?.name ?? '還沒有條碼資料' }}</h1>
         <p v-if="refreshedCount">已刷新過了 {{ refreshedCount }} 次</p>
       </header>
 
-      <BarcodeShower :value="selectedBarcode?.code" @refresh="getRandomBarcode()" />
+      <BarcodeShower
+        :value="selectedBarcode?.code"
+        @refresh="getRandomBarcode()"
+        @add-new="settingDialog?.showDialog()"
+      />
 
       <footer>
         <ul>

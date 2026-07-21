@@ -8,8 +8,8 @@
       <!-- eslint-disable-next-line vue/html-self-closing -->
       <svg ref="svgRef" class="barcode-img" aria-label="Invoice carrier"></svg>
     </button>
-    <button v-else type="button">
-      <!--  -->
+    <button v-else type="button" class="no-barcode" @click="$emit('addNew')">
+      <i-material-symbols-add />
     </button>
   </div>
 </template>
@@ -23,6 +23,7 @@ const props = defineProps<{
 
 defineEmits<{
   refresh: []
+  addNew: []
 }>()
 
 const svgRef = ref<SVGSVGElement | null>(null)
@@ -74,5 +75,17 @@ button {
 
 .barcode-shower .barcode-img {
   max-width: 100%;
+}
+
+.no-barcode {
+  color: #94a3b8;
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 340px;
+  height: 128px;
+  border: 1px dashed currentColor;
+  border-radius: .25rem;
 }
 </style>

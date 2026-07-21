@@ -48,6 +48,7 @@ function showDialog() {
 
 function clearRecord() {
   records.value = {}
+  dialog.value?.close()
 }
 
 defineExpose({
