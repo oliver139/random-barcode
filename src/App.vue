@@ -8,12 +8,14 @@
 
       <BarcodeShower
         :value="selectedBarcode?.code"
+        :disabled="doneRecording"
         @refresh="getRandomBarcode()"
         @add-new="settingDialog?.showDialog()"
+        @request-new="newBarcode()"
       />
 
       <footer>
-        <ul>
+        <ul v-if="barcodes.length">
           <li>
             <button type="button" class="stat-btn" @click="recordDialog?.showDialog()">
               <i-material-symbols-bar-chart-rounded style="transform: scaleX(-1);" />
@@ -25,7 +27,7 @@
             </button>
           </li>
           <li>
-            <button type="button" class="confirm-btn" @click="recordResult()">
+            <button type="button" class="confirm-btn" :disabled="doneRecording" @click="recordResult()">
               <i-material-symbols-check />
             </button>
           </li>
@@ -45,6 +47,8 @@ import BarcodeShower from './components/BarcodeShower.vue'
 
 const barcodes = useLocalStorage<BarcodeInfo[]>('barcodes', [])
 const selectedBarcode = shallowRef<BarcodeInfo | null>(null)
+const records = useLocalStorage<Record<string, UsageRecord>>('records', {})
+const doneRecording = ref(false)
 
 const refreshedCount = ref(0)
 
@@ -73,6 +77,7 @@ function newBarcode() {
   nextTick(() => {
     getRandomBarcode()
     refreshedCount.value = 0
+    doneRecording.value = false
   })
 }
 
@@ -84,8 +89,6 @@ const settingDialog = useTemplateRef('settingDialog')
 function doneSetting() {
   newBarcode()
 }
-
-const records = useLocalStorage<Record<string, UsageRecord>>('records', {})
 function recordResult() {
   if (!selectedBarcode.value) return
 
@@ -97,7 +100,7 @@ function recordResult() {
       count: currentCount + 1,
     },
   }
-  newBarcode()
+  doneRecording.value = true
 }
 
 const recordDialog = useTemplateRef('recordDialog')
@@ -166,6 +169,9 @@ button {
   cursor: pointer;
   transition: background-color 0.2s ease;
   transition: all .3s ease;
+}
+button:disabled {
+  opacity: .4;
 }
 
 .stat-btn {
