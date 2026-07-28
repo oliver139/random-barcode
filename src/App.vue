@@ -31,7 +31,7 @@
             </button>
           </li>
           <li>
-            <button type="button" class="refresh-btn" @click="doneRecording ? newBarcode() : getRandomBarcode()">
+            <button ref="refreshBtn" type="button" class="refresh-btn">
               <i-material-symbols-refresh-rounded style="transform: scaleX(-1);" />
             </button>
           </li>
@@ -124,6 +124,28 @@ const { distanceY } = usePointerSwipe(mainEle, {
   },
 })
 whenever(() => layout.value !== 'swipe', () => displayTop.value = false)
+
+// Long press refresh
+const refreshBtn = useTemplateRef('refreshBtn')
+onLongPress(
+  refreshBtn,
+  onLongPressCallback,
+  {
+    distanceThreshold: 20,
+    delay: 750,
+    onMouseUp: onMouseUpCallback,
+  },
+)
+const intervalId = ref<NodeJS.Timeout>()
+function onLongPressCallback() {
+  intervalId.value = setInterval(() => {
+    doneRecording.value ? newBarcode() : getRandomBarcode()
+  }, 30)
+}
+function onMouseUpCallback(duration: number, distance: number, isLongPress: boolean) {
+  if (!isLongPress) doneRecording.value ? newBarcode() : getRandomBarcode()
+  clearInterval(intervalId.value)
+}
 </script>
 
 <style scoped>
