@@ -1,3 +1,7 @@
 html {
   font-family: system-ui, sans-serif; 
 }
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
