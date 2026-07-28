@@ -5,7 +5,17 @@
       <div class="form-content">
         <div class="title">條碼列表（名字，條碼）</div>
         <textarea v-model="barcodeList" autocomplete="off" rows="10" />
+
+        <div class="layout-select">
+          <label for="layout-picker" class="title">版面</label>
+          <select id="layout-picker" v-model="layoutChoice">
+            <option value="swipe">滑動上下切換</option>
+            <option value="up">條碼在頂</option>
+            <option value="down">條碼在中間</option>
+          </select>
+        </div>
       </div>
+
       <ul class="btn-list">
         <li>
           <button type="button" class="close-dialog" commandfor="setting-dialog" command="close">
@@ -23,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BarcodeInfo, UsageRecord } from '@/type/general'
+import type { BarcodeInfo, Layout, UsageRecord } from '@/type/general'
 
 const emit = defineEmits<{
   done: []
@@ -32,21 +42,29 @@ const emit = defineEmits<{
 const dialog = useTemplateRef('dialog')
 const barcodes = useLocalStorage<BarcodeInfo[]>('barcodes', [])
 const records = useLocalStorage<Record<string, UsageRecord>>('records', {})
+const layout = useLocalStorage<Layout>('layout', 'swipe')
+const layoutChoice = ref(layout.value)
 
 const barcodeList = ref('')
 function isBarcodeText(code: string) {
   return code.trim().startsWith('/') && code.trim().length === 8
 }
 function saveSetting() {
-  barcodes.value = barcodeList.value.replaceAll('，', ',').split('\n').filter((item) => {
-    return item.includes(',') ? item.split(',').some(b => isBarcodeText(b.trim())) : isBarcodeText(item.trim())
-  }).map<BarcodeInfo>((item) => {
-    if (!item.includes(',')) return { name: '這誰？', code: item }
+  layout.value = layoutChoice.value
 
-    const [v1, v2] = item.split(',').map(b => b.trim())
-    return isBarcodeText(v1) ? { name: v2 || '這誰？', code: v1 } : { name: v1 || '這誰？', code: v2 }
-  })
-  records.value = {}
+  const oldBarcodeSet = barcodes.value.map(item => Object.values(item).join(',')).join('\n')
+  if (barcodeList.value !== oldBarcodeSet) {
+    barcodes.value = barcodeList.value.replaceAll('，', ',').split('\n').filter((item) => {
+      return item.includes(',') ? item.split(',').some(b => isBarcodeText(b.trim())) : isBarcodeText(item.trim())
+    }).map<BarcodeInfo>((item) => {
+      if (!item.includes(',')) return { name: '這誰？', code: item }
+
+      const [v1, v2] = item.split(',').map(b => b.trim())
+      return isBarcodeText(v1) ? { name: v2 || '這誰？', code: v1 } : { name: v1 || '這誰？', code: v2 }
+    })
+    records.value = {}
+  }
+
   emit('done')
 }
 
@@ -113,6 +131,23 @@ dialog[open]::backdrop {
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.layout-select {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-top: 1rem;
+}
+.layout-select label {
+  margin: 0;
+}
+.layout-select select {
+  flex-grow: 1;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: .5rem;
+  padding: .5rem .5rem;
 }
 
 ul {

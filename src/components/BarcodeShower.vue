@@ -1,26 +1,15 @@
 <template>
   <div class="barcode-shower">
-    <button
-      v-if="value"
-      type="button"
-      :disabled
-      aria-label="Click to refresh"
-      @click="$emit('refresh')"
-    >
-      <p class="hint-text">
-        <i-material-symbols-refresh-rounded />
-        <span>輕觸條碼以刷新</span>
-      </p>
+    <div style="position: relative;">
       <!-- eslint-disable-next-line vue/html-self-closing -->
-      <svg ref="svgRef" class="barcode-img" aria-label="Invoice carrier"></svg>
-    </button>
-    <button v-else type="button" class="no-barcode" @click="$emit('addNew')">
-      <i-material-symbols-add />
-    </button>
-
-    <button v-if="disabled" type="button" class="request-new" @click="$emit('requestNew')">
-      <i-material-symbols-refresh-rounded style="transform: scaleX(-1);" />
-    </button>
+      <svg v-if="value" ref="svgRef" class="barcode-img" aria-label="Invoice carrier"></svg>
+      <button v-else type="button" class="no-barcode" @click="$emit('addNew')">
+        <i-material-symbols-add />
+      </button>
+      <button v-if="disabled" type="button" class="request-new" @click="$emit('requestNew')">
+        <i-material-symbols-refresh-rounded style="transform: scaleX(-1);" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -33,7 +22,6 @@ const props = defineProps<{
 }>()
 
 defineEmits<{
-  refresh: []
   addNew: []
   requestNew: []
 }>()
@@ -66,14 +54,6 @@ watchImmediate(() => props.value, (v) => {
 </script>
 
 <style scoped>
-.hint-text {
-  font-size: 1rem;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  margin: 0 0 .25rem;
-  gap: .25rem;
-}
 button {
   cursor: pointer;
   display: flex;
@@ -86,6 +66,8 @@ button {
 }
 
 .barcode-shower {
+  display: flex;
+  justify-content: center;
   position: relative;
 }
 .barcode-shower .barcode-img {

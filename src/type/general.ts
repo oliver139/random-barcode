@@ -7,3 +7,5 @@ export interface UsageRecord {
   name: string
   count: number
 }
+
+export type Layout = 'up' | 'down' | 'swipe'
