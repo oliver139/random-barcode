@@ -58,6 +58,8 @@ defineExpose({
 
 <style scoped>
 dialog {
+  display: flex;
+  flex-flow: column nowrap;
   width: min(24rem, 100%);
   opacity: 0;
   background: none;
@@ -74,8 +76,6 @@ dialog::backdrop {
 }
 
 dialog[open] {
-  display: flex;
-  flex-flow: column nowrap;
   opacity: 1;
 }
 dialog[open]::backdrop {
