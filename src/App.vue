@@ -113,7 +113,7 @@ const recordDialog = useTemplateRef('recordDialog')
 // Swipe function
 const mainEle = useTemplateRef('main')
 const displayTop = ref(false)
-const swipe = usePointerSwipe(mainEle, {
+usePointerSwipe(mainEle, {
   threshold: 150,
   onSwipeEnd: (_, direction) => {
     if (!mainEle.value || layout.value !== 'swipe') return
