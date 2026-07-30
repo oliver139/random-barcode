@@ -5,7 +5,7 @@
         <h1>{{ selectedBarcode?.name ?? '還沒有條碼資料' }}</h1>
         <p v-if="refreshedCount">已刷新過了 {{ refreshedCount }} 次</p>
       </header>
-
+      {{ swipe }}
       <BarcodeShower
         :value="selectedBarcode?.code"
         :disabled="doneRecording"
@@ -113,12 +113,11 @@ const recordDialog = useTemplateRef('recordDialog')
 // Swipe function
 const mainEle = useTemplateRef('main')
 const displayTop = ref(false)
-const { distanceY } = usePointerSwipe(mainEle, {
-  disableTextSelect: true,
+const swipe = usePointerSwipe(mainEle, {
+  threshold: 150,
   onSwipeEnd: (_, direction) => {
     if (!mainEle.value || layout.value !== 'swipe') return
     if (direction !== 'up' && direction !== 'down') return
-    if (Math.abs(distanceY.value) < 200) return
 
     displayTop.value = direction === 'up'
   },
@@ -162,6 +161,7 @@ function onMouseUpCallback(duration: number, distance: number, isLongPress: bool
   justify-content: flex-start;
   align-items: center;
   padding: .5rem;
+  touch-action: none !important;
 }
 
 .content {
