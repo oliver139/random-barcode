@@ -112,7 +112,7 @@ const recordDialog = useTemplateRef('recordDialog')
 
 // Swipe function
 const mainEle = useTemplateRef('main')
-const displayTop = ref(false)
+const displayTop = useLocalStorage<boolean>('displayTop', false)
 usePointerSwipe(mainEle, {
   threshold: 150,
   onSwipeEnd: (_, direction) => {
