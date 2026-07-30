@@ -283,6 +283,6 @@ button:disabled {
 }
 .content.up .barcode-shower {
   transform: translateY(0);
-  top: 1.5rem;
+  top: 2.5rem;
 }
 </style>
